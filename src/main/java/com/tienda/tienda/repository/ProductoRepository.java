@@ -1,3 +1,4 @@
+
 package com.tienda.tienda.repository;
 
 import com.tienda.tienda.domain.Producto;
@@ -5,6 +6,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface ProductoRepository extends JpaRepository<Producto, Integer> {
 
@@ -21,4 +23,10 @@ public interface ProductoRepository extends JpaRepository<Producto, Integer> {
     @Query(nativeQuery = true,
             value = "SELECT * FROM producto p WHERE p.precio BETWEEN :precioInf AND :precioSup ORDER BY p.precio ASC")
     public List<Producto> consultaSQL(BigDecimal precioInf, BigDecimal precioSup);
+
+    //Consulta ampliada que recupera los productos según la categoría seleccionada
+    @Query("SELECT p FROM Producto p WHERE p.categoria.idCategoria = :idCategoria")
+    public List<Producto> consultaProductosPorCategoria(
+            @Param("idCategoria") Integer idCategoria);
+
 }
